@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<meta name="Description" content="Enter your description here" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css"
+		/>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+		<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+		<title>Title</title>
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="row py-5">
+				<div class="col">
+					<button
+						class="btn btn-success float-right my-3"
+						id="reload"
+					>
+						Reload
+					</button>
+					<table id="example" class="display" style="width: 100%">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Email</th>
+								<th>Museum Name</th>
+								<th>Created On</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		<script>
+            $(document).ready(function(){
+                let table
+                table=$('#example').DataTable({
+                    "ajax":{
+                        "url":"loadUsers.php",
+                        "type": "POST",
+                        "dataSrc":"",
+                    },
+                    "columns":[
+                        {"data":"id"},
+                        {"data":"email"},
+                        {"data":"museum_name"},
+                        {"data":"created_on"},
+                        {
+                            data: null,
+                            className: "center",
+                            defaultContent: '<a href="" class="editor_edit btn"><i class="fas fa-edit text-primary"></i></a> <a href="" class="editor_remove btn"><i class="fas fa-trash-alt text-danger"></i></a>'
+                        }
+                    ]
+                })
+
+                $('#reload').click(function(){
+                    reloadTable()
+                })
+
+                // Edit record
+                $('#example').on('click', 'a.editor_edit', function (e) {
+                    e.preventDefault()
+                    let row= $(this).closest('tr')
+                    let firstElement=row.find('td:eq(0)').text()
+                    alert(firstElement)
+                    reloadTable()
+                });
+            
+                // Delete a record
+                $('#example').on('click', 'a.editor_remove', function (e) {
+                    e.preventDefault()
+                    let row= $(this).closest('tr')
+                    row.css('background-color','#FFA5BD')
+                    row.fadeOut();
+                });
+
+                function reloadTable(){
+                    table.ajax.reload()
+                }
+            })
+        </script>
+	</body>
+</html>
